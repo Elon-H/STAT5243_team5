@@ -7,17 +7,18 @@ __pycache__/
 # Large data files
 *.h5
 *.h5ad
-151674/
-151510/
-151508/
-151673/
-GraphST_repo/
 
 # System files
 .DS_Store
 Thumbs.db
-GraphST_工作日志.md
 
 # R
 .Rhistory
-.RData 
+.RData
+
+# Specific directories
+GraphST_part/151674/
+GraphST_part/151510/
+GraphST_part/151508/
+GraphST_part/151673/
+GraphST_part/GraphST_工作日志.md
