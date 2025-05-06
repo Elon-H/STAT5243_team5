@@ -8,6 +8,7 @@ __pycache__/
 *.h5
 *.h5ad
 *.loom
+*.xlsx
 
 # System files
 .DS_Store

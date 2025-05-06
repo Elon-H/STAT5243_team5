@@ -16,15 +16,11 @@ def filter_with_overlap_gene(adata, adata_sc):
     #sc.pp.filter_genes(adata, min_cells=1)
     #sc.pp.filter_genes(adata_sc, min_cells=1)
     
-    if 'highly_variable' not in adata.var.keys():
-       raise ValueError("'highly_variable' are not existed in adata!")
-    else:    
-       adata = adata[:, adata.var['highly_variable']]
-       
-    if 'highly_variable' not in adata_sc.var.keys():
-       raise ValueError("'highly_variable' are not existed in adata_sc!")
-    else:    
-       adata_sc = adata_sc[:, adata_sc.var['highly_variable']]   
+    # Check if highly_variable exists in both datasets
+    if 'highly_variable' in adata.var.keys():
+        adata = adata[:, adata.var['highly_variable']]
+    if 'highly_variable' in adata_sc.var.keys():
+        adata_sc = adata_sc[:, adata_sc.var['highly_variable']]
 
     # Refine `marker_genes` so that they are shared by both adatas
     genes = list(set(adata.var.index) & set(adata_sc.var.index))
@@ -103,14 +99,19 @@ def preprocess(adata):
     
 def get_feature(adata, deconvolution=False):
     if deconvolution:
-       adata_Vars = adata
+        adata_Vars = adata
     else:   
-       adata_Vars =  adata[:, adata.var['highly_variable']]
-       
+        # Check if highly_variable column exists
+        if 'highly_variable' in adata.var.columns:
+            adata_Vars = adata[:, adata.var['highly_variable']]
+        else:
+            # If no HVG filtering, use all genes
+            adata_Vars = adata
+
     if isinstance(adata_Vars.X, csc_matrix) or isinstance(adata_Vars.X, csr_matrix):
-       feat = adata_Vars.X.toarray()[:, ]
+        feat = adata_Vars.X.toarray()[:, ]
     else:
-       feat = adata_Vars.X[:, ] 
+        feat = adata_Vars.X[:, ]
     
     # data augmentation
     feat_a = permutation(feat)
